@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI编程学习助手</title>
+    <!-- 
+    项目需求：创建一个名为“AI编程学习助手”的现代化Web应用。
+    功能模块：
+    1. 标题区：包含应用名称“AI编程学习助手”和副标题“我的智能开发伙伴”。
+    2. 任务清单区：
+        - 有一个输入框和“添加”按钮。
+        - 可以添加新的学习任务（例如：“学习Git提交”）。
+        - 每个任务项前有复选框，可以标记为完成（完成后文字有删除线）。
+        - 每个任务项后有删除按钮，可以删除该任务。
+    3. AI灵感区：
+        - 有一个“获取今日编程建议”按钮。
+        - 点击按钮后，在下方动态显示一条来自“预定义列表”的随机编程建议（例如：“尝试用JavaScript写一个计数器”）。
+        - 建议列表至少包含5条不同的、实用的编程学习建议。
+    4. 页脚区：包含版权信息“© 2024 由AI驱动构建”和一个指向我的GitHub主页的链接（https://github.com/YUANBSY）。
+    设计风格：
+    - 整体采用现代化专业设计，主色调为科技蓝（#2563eb）和浅灰色背景。
+    - 布局清晰，模块之间有适当间距和阴影。
+    - 使用柔和的圆角和悬停效果提升交互体验。
+    技术要求：
+    - 使用纯HTML、CSS和JavaScript（ES6）实现。
+    - 所有代码写在本文件中，无需额外文件。
+    - 代码结构清晰，有必要的注释。
+    -->
+</head>
+<body>
+    <!-- AI将在这里生成所有应用代码 -->
+<!-- 主容器 -->
+<div class="app">
+    <!-- 标题区 -->
+    <header class="header">
+        <h1 class="title">AI编程学习助手</h1>
+        <p class="subtitle">我的智能开发伙伴</p>
+    </header>
+
+    <!-- 主体：任务清单 + AI灵感 -->
+    <main class="main-grid">
+        <!-- 任务清单区 -->
+        <section class="card tasks-card" aria-labelledby="tasks-heading">
+            <h2 id="tasks-heading">学习任务清单</h2>
+
+            <div class="task-input-row">
+                <input id="new-task-input" type="text" placeholder="输入新的学习任务，例如：学习Git提交" />
+                <button id="add-task-btn" class="btn primary">添加</button>
+            </div>
+
+            <ul id="task-list" class="task-list" aria-live="polite"></ul>
+        </section>
+
+        <!-- AI灵感区 -->
+        <section class="card ai-card" aria-labelledby="ai-heading">
+            <h2 id="ai-heading">AI灵感</h2>
+            <p class="ai-desc">需要一点灵感？点击下方获取今日编程建议。</p>
+            <button id="get-suggestion-btn" class="btn accent">获取今日编程建议</button>
+
+            <div id="suggestion-output" class="suggestion-output" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <span>© 2024 由AI驱动构建</span>
+        <a href="https://github.com/YUANBSY" target="_blank" rel="noopener">我的 GitHub</a>
+    </footer>
+</div>
+
+<!-- 样式（内联，单文件） -->
+<style>
+    :root{
+        --brand:#2563eb;
+        --bg:#f3f4f6;
+        --card:#ffffff;
+        --muted:#6b7280;
+        --radius:12px;
+        --shadow: 0 6px 18px rgba(37,99,235,0.08);
+    }
+    html,body{height:100%;}
+    body{
+        margin:0;
+        font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background:var(--bg);
+        color:#111827;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+        padding:40px;
+        box-sizing:border-box;
+    }
+
+    .app{max-width:980px;margin:0 auto;}
+
+    .header{
+        text-align:left;
+        margin-bottom:20px;
+    }
+    .title{
+        margin:0;
+        color:var(--brand);
+        font-size:28px;
+        letter-spacing:0.2px;
+    }
+    .subtitle{
+        margin:6px 0 0 0;
+        color:var(--muted);
+        font-size:14px;
+    }
+
+    .main-grid{
+        display:grid;
+        grid-template-columns:1fr 360px;
+        gap:20px;
+        align-items:start;
+    }
+
+    .card{
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:18px;
+    }
+
+    .tasks-card h2, .ai-card h2{margin:0 0 12px 0;font-size:16px;}
+    .task-input-row{
+        display:flex;
+        gap:8px;
+        margin-bottom:12px;
+    }
+    #new-task-input{
+        flex:1;
+        padding:10px 12px;
+        border:1px solid #e6e9ef;
+        border-radius:10px;
+        outline:none;
+        transition:box-shadow .15s, border-color .15s;
+    }
+    #new-task-input:focus{box-shadow:0 0 0 4px rgba(37,99,235,0.08);border-color:var(--brand);}
+
+    .btn{
+        padding:10px 14px;
+        border-radius:10px;
+        border:0;
+        cursor:pointer;
+        font-weight:600;
+        transition:transform .12s, box-shadow .12s;
+    }
+    .btn:hover{transform:translateY(-2px);}
+    .primary{background:var(--brand);color:#fff;box-shadow:0 6px 14px rgba(37,99,235,0.12);}
+    .accent{background:linear-gradient(90deg,var(--brand),#1e40af);color:#fff;box-shadow:0 6px 14px rgba(30,64,175,0.12);}
+
+    .task-list{list-style:none;padding:0;margin:0;}
+    .task-item{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:10px;
+        border-radius:10px;
+        margin-bottom:8px;
+        transition:background .12s;
+    }
+    .task-item:hover{background:#f8fafc;}
+    .task-item input[type="checkbox"]{width:18px;height:18px;cursor:pointer;}
+    .task-label{
+        flex:1;
+        font-size:14px;
+        color:#0f172a;
+    }
+    /* 完成任务样式 */
+    .task-item input[type="checkbox"]:checked + .task-label{
+        text-decoration:line-through;
+        color:var(--muted);
+        opacity:0.85;
+    }
+    .delete-btn{
+        background:transparent;
+        border:0;
+        color:#ef4444;
+        font-weight:700;
+        cursor:pointer;
+        padding:6px 8px;
+        border-radius:8px;
+    }
+    .delete-btn:hover{background:rgba(239,68,68,0.06);}
+
+    .ai-desc{color:var(--muted);margin:0 0 12px 0;font-size:14px;}
+    .suggestion-output{
+        margin-top:12px;
+        min-height:56px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:12px;
+        border-radius:10px;
+        background:#f8fafc;
+        color:#0f172a;
+        font-weight:600;
+        transition:opacity .18s, transform .18s;
+    }
+    .suggestion-output.fade-in{opacity:0;transform:translateY(6px);animation:fadeIn .28s forwards;}
+    @keyframes fadeIn{to{opacity:1;transform:none;}}
+
+    .footer{
+        margin-top:18px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        color:var(--muted);
+        font-size:13px;
+    }
+    .footer a{color:var(--brand);text-decoration:none;font-weight:600;}
+    @media (max-width:880px){
+        .main-grid{grid-template-columns:1fr; }
+        body{padding:20px;}
+    }
+</style>
+
+<!-- 功能脚本 -->
+<script>
+    // 任务数据持久化键
+    const STORAGE_KEY = 'ai_learning_tasks_v1';
+
+    // 元素引用
+    const newTaskInput = document.getElementById('new-task-input');
+    const addTaskBtn = document.getElementById('add-task-btn');
+    const taskListEl = document.getElementById('task-list');
+    const suggestionBtn = document.getElementById('get-suggestion-btn');
+    const suggestionOutput = document.getElementById('suggestion-output');
+
+    // 预定义建议列表（至少5条）
+    const suggestions = [
+        '尝试用JavaScript写一个计数器，练习DOM操作和事件处理。',
+        '用CSS Grid实现一个响应式画廊布局，练习栅格系统。',
+        '用Fetch API从公共API获取数据并渲染在页面上，理解异步流程。',
+        '用Git练习分支与合并：创建feature分支并提交，解决一个冲突。',
+        '实现一个简单的Todo应用并加入本地存储，学习状态持久化。',
+        '用ES6模块拆分代码，练习导入导出与模块化设计。',
+        '尝试在项目中加入单元测试，使用Jest或Vitest写一个简单用例。'
+    ];
+
+    // 加载任务（从localStorage）
+    let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+    // 渲染任务列表
+    function renderTasks() {
+        taskListEl.innerHTML = '';
+        tasks.forEach(task => {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = task.done;
+            checkbox.addEventListener('change', () => {
+                task.done = checkbox.checked;
+                saveTasks();
+                // 通过重渲染保持一致
+                renderTasks();
+            });
+
+            const label = document.createElement('span');
+            label.className = 'task-label';
+            label.textContent = task.text;
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-btn';
+            delBtn.type = 'button';
+            delBtn.setAttribute('aria-label', '删除任务');
+            delBtn.textContent = '删除';
+            delBtn.addEventListener('click', () => {
+                tasks = tasks.filter(t => t.id !== task.id);
+                saveTasks();
+                renderTasks();
+            });
+
+            li.appendChild(checkbox);
+            li.appendChild(label);
+            li.appendChild(delBtn);
+            taskListEl.appendChild(li);
+        });
+
+        // 空状态提示
+        if (tasks.length === 0) {
+            const empty = document.createElement('p');
+            empty.style.color = 'var(--muted)';
+            empty.style.margin = '8px 0 0 0';
+            empty.textContent = '暂无任务，快添加一个新的学习目标吧！';
+            taskListEl.appendChild(empty);
+        }
+    }
+
+    // 保存到 localStorage
+    function saveTasks() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    // 添加新任务
+    function addTaskFromInput() {
+        const text = newTaskInput.value.trim();
+        if (!text) return;
+        const newTask = { id: Date.now().toString(), text, done: false };
+        tasks.unshift(newTask);
+        saveTasks();
+        newTaskInput.value = '';
+        renderTasks();
+        newTaskInput.focus();
+    }
+
+    // 绑定事件
+    addTaskBtn.addEventListener('click', addTaskFromInput);
+    newTaskInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') addTaskFromInput();
+    });
+
+    // 获取并显示随机建议
+    suggestionBtn.addEventListener('click', () => {
+        const idx = Math.floor(Math.random() * suggestions.length);
+        suggestionOutput.textContent = suggestions[idx];
+        // 触发动画
+        suggestionOutput.classList.remove('fade-in');
+        // reflow to restart
+        void suggestionOutput.offsetWidth;
+        suggestionOutput.classList.add('fade-in');
+    });
+
+    // 初始渲染
+    renderTasks();
+</script>
+</body>
+</html>
